@@ -14,11 +14,12 @@
 
   .header {
     display: flex;
-    align-items: flex-end;
+    align-items: flex-start;
     justify-content: space-between;
-    margin-bottom: 24px;
+    margin-bottom: 20px;
     padding-bottom: 18px;
     border-bottom: 2px solid #111;
+    gap: 20px;
   }
   .header-left h1 {
     font-size: 20px;
@@ -30,11 +31,42 @@
     font-size: 12px;
     color: #888;
     margin-top: 4px;
+    line-height: 1.6;
   }
+  .header-right {
+    flex-shrink: 0;
+  }
+
+  .infra-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 8px;
+  }
+  .infra-tag {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 3px 9px;
+    border-radius: 20px;
+    background: #E3F2FD;
+    color: #0D47A1;
+    letter-spacing: .02em;
+  }
+  .infra-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: #aaa;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    margin-top: 10px;
+    margin-bottom: 4px;
+  }
+
   .legend {
     display: flex;
     gap: 12px;
     align-items: center;
+    margin-top: 8px;
   }
   .leg-item {
     display: flex;
@@ -73,9 +105,25 @@
   tbody tr {
     transition: background .12s;
   }
-  tbody tr:hover { background: #f7f7f7; }
-  tbody tr:nth-child(even) { background: #fafafa; }
-  tbody tr:nth-child(even):hover { background: #f2f2f2; }
+  tbody tr:hover { background: #f0f4ff !important; }
+
+  /* 이름 그룹별 교대 배경 */
+  tbody tr.group-a { background: #fff; }
+  tbody tr.group-b { background: #F7F8FB; }
+
+  /* 그룹 내 첫 행: 위 구분선 강조 */
+  tbody tr.group-first td {
+    border-top: 2px solid #dde0e8;
+  }
+
+  td.col-name {
+    position: relative;
+  }
+  /* 같은 그룹 내 첫 행 이외의 이름 칸: 살짝 흐리게 */
+  tbody tr:not(.group-first) td.col-name {
+    color: #aaa;
+    font-size: 11px;
+  }
 
   td {
     padding: 12px 14px;
@@ -89,12 +137,12 @@
     font-size: 12px;
     color: #333;
     white-space: nowrap;
-    width: 80px;
+    width: 72px;
   }
   td.col-idea {
     font-size: 13px;
     color: #222;
-    width: 210px;
+    width: 200px;
     line-height: 1.55;
   }
 
@@ -139,10 +187,12 @@
     background: #fff;
     border-radius: 14px;
     width: 92%;
-    max-width: 440px;
+    max-width: 460px;
     padding: 28px 28px 24px;
     position: relative;
     box-shadow: 0 20px 60px rgba(0,0,0,.18);
+    max-height: 85vh;
+    overflow-y: auto;
   }
   .modal-close {
     position: absolute; top: 16px; right: 18px;
@@ -186,6 +236,7 @@
     color: #444;
     line-height: 1.75;
     margin-bottom: 18px;
+    white-space: pre-line;
   }
   .modal-tools {
     display: flex;
@@ -205,19 +256,45 @@
     border-top: 1px solid #eee;
     margin: 16px 0;
   }
+
+  .note-box {
+    background: #F8F9FA;
+    border: 1px solid #E0E0E0;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 20px;
+    font-size: 11.5px;
+    color: #555;
+    line-height: 1.7;
+  }
+  .note-box strong { color: #111; }
 </style>
 
 <div class="page">
   <div class="header">
     <div class="header-left">
-      <h1>사업PM실 AI 활용 아이디어 — 실현 가능성 분석</h1>
-      <p>기준: Claude/GPT API + 바이브코딩 가능 · 비용 무료~소액 · 사내 데이터 보안 · 1인 운영 가능</p>
+      <h1>퍼블리싱사업8실 AI 활용 아이디어 — 실현 가능성 분석</h1>
+      <p>응답자별 1인 1행 · 아이디어 단위 분석<br>기준: 사내 인프라 기준 · 보안 정책 반영 · 1인 운영 가능성 중심</p>
+      <div class="infra-label">현재 사내 인프라</div>
+      <div class="infra-tags">
+        <span class="infra-tag">Claude Enterprise (챗·코드·코워크·MCP)</span>
+        <span class="infra-tag">n8n Enterprise</span>
+        <span class="infra-tag">Gemini Enterprise / NotebookLM</span>
+        <span class="infra-tag">GitHub Copilot</span>
+        <span class="infra-tag">Azure OpenAI (API 심사 필요)</span>
+      </div>
     </div>
-    <div class="legend">
-      <div class="leg-item"><div class="leg-dot dot-ok"></div>가능</div>
-      <div class="leg-item"><div class="leg-dot dot-part"></div>부분 가능</div>
-      <div class="leg-item"><div class="leg-dot dot-hard"></div>어려움</div>
+    <div class="header-right">
+      <div class="legend">
+        <div class="leg-item"><div class="leg-dot dot-ok"></div>가능</div>
+        <div class="leg-item"><div class="leg-dot dot-part"></div>부분 가능</div>
+        <div class="leg-item"><div class="leg-dot dot-hard"></div>어려움</div>
+      </div>
     </div>
+  </div>
+
+  <div class="note-box">
+    <strong>인프라 전제 조건</strong> — Claude API 직접 연동 불가 (Claude Enterprise 챗/코드/코워크/MCP·플러그인 활용 가능). 외부 API 연동이 필요한 플러그인은 보안 심사 후 제한적 허용. n8n Enterprise 도입으로 자동화 워크플로우 구현 가능. 외부 API(AWS·Azure·GCP)는 사내 클라우드 서비스 신청 + 명분 심사 필요. <strong>내부 게임 데이터는 보안 민감 — 외부 AI 전송 원칙적 제한.</strong>
   </div>
 
   <table>
@@ -251,149 +328,454 @@
 
 <script>
 const data = [
-  {
-    name: '박정원',
-    idea: '주간보고 등 반복 업무 자동화',
-    tools: ['Claude API', 'Make / n8n', '문서 자동화'],
-    free: { tier:'ok',   label:'완전 가능',         sub:'지금 바로 구현 가능', text:'보고서 템플릿 + Claude API 조합으로 즉시 구현 가능. Make·n8n으로 노코드 자동화도 충분. 바이브코딩으로 하루 안에 프로토타입 완성 가능.' },
-    cost: { tier:'ok',   label:'가능',               sub:'월 $5 이하', text:'개인 업무 수준은 Claude API 비용 월 $5 이하. Make 무료 플랜으로 충분.' },
-    sec:  { tier:'ok',   label:'가능',               sub:'직접 입력 방식이면 OK', text:'보고 내용을 직접 입력하는 방식이면 외부 유출 없음. 사내 시스템 자동 수집 구조라면 IT 확인 필요.' },
-  },
-  {
-    name: '강수정 / 임호민',
-    idea: '게임 업계 뉴스 자동 요약·공유 봇',
-    tools: ['RSS', 'Claude API', 'GitHub Actions', 'Slack Webhook'],
-    free: { tier:'ok',   label:'완전 가능',         sub:'팀 내 구축 사례 있음', text:'팀 내 이미 구축된 AI 뉴스 파이프라인과 동일 구조. 게임 매체 버전으로 바로 확장 가능.' },
-    cost: { tier:'ok',   label:'가능',               sub:'월 $3~5 수준', text:'GitHub Actions 무료 티어 + Claude API 소액. 일 100건 처리 기준 월 $3~5.' },
-    sec:  { tier:'ok',   label:'가능',               sub:'공개 뉴스만 수집', text:'공개 뉴스만 수집하므로 보안 이슈 없음. Slack Webhook 연동도 기존 권한 내에서 가능.' },
-  },
+  // ── 강석환 ──────────────────────────────────────────────────────────
   {
     name: '강석환',
     idea: '시장 기대치 측정 모델',
-    tools: ['Perplexity', 'Claude 분석', '데이터 설계'],
-    free: { tier:'ok',   label:'가능한 플랜 있음',  sub:'정성 분석부터 시작', text:'"기대치"를 정성적으로 정의하면 Perplexity 리서치 + Claude 분석으로 지금 가능. 정량 모델은 별도 데이터 파이프라인 필요하지만 1단계는 지금 시작 가능.' },
-    cost: { tier:'part', label:'부분 가능',          sub:'약 $10~20/월', text:'정성 분석은 소액(Claude API $5 이하). 정량 예측으로 확장 시 Perplexity API($20/월) 또는 유료 데이터 서비스 비용 발생.' },
-    sec:  { tier:'part', label:'부분 가능',          sub:'사내 데이터 혼용 시 주의', text:'공개 시장 데이터 기반이라 기본적으로 OK. 단, 사내 매출·지표 데이터를 함께 활용할 경우 외부 API 전송 보안 검토 필요.' },
+    tools: ['Claude Enterprise', 'Perplexity', 'n8n', '케이스 DB'],
+    free: {
+      tier: 'ok',
+      label: '정성 분석부터 시작 가능',
+      sub: '케이스 DB 구축 후 정량화 단계적 확장',
+      text: '기대치를 정성적으로 정의하면 Perplexity 리서치 + Claude Enterprise 분석으로 지금 가능. 케이스 DB를 Notion 등에 구축한 뒤, n8n으로 자동 수집-집계 구조로 발전시키는 단계적 접근 권장.'
+    },
+    cost: {
+      tier: 'part',
+      label: '부분 가능',
+      sub: 'Perplexity API 심사 필요 시 비용 발생',
+      text: 'Claude Enterprise, n8n은 추가 비용 없음. Perplexity API 자동화 연동 시 사내 클라우드 서비스 심사 신청 필요. 통과 전까지는 수동 리서치로 대체 가능.'
+    },
+    sec: {
+      tier: 'part',
+      label: '외부/내부 분리 접근 필요',
+      sub: '내부 게임 데이터 혼용 시 제한',
+      text: '외부 시장 데이터 기반 분석은 보안 이슈 없음. / 내부 게임 데이터: 사내 매출-지표 데이터를 외부 API로 전송하는 구조는 원칙적 제한. Claude Enterprise 내부 처리로 한정 권장.'
+    },
   },
+
+  // ── 강수정 ──────────────────────────────────────────────────────────
   {
-    name: '최성욱',
-    idea: '나를 학습시켜 생각을 패턴화하는 개인 AI 에이전트',
-    tools: ['Claude Projects', 'Mem0', '시스템 프롬프트', 'n8n'],
-    free: { tier:'ok',   label:'완전 가능',         sub:'요즘 표준 에이전트 패턴', text:'Claude Projects에 업무 방식·선호도·판단 기준을 정의해두면 지금 바로 가능. Mem0 같은 장기 메모리 레이어를 붙이면 세션 간 학습도 구현 가능.' },
-    cost: { tier:'ok',   label:'가능',               sub:'Claude Pro $20/월', text:'Claude Pro 월 $20 또는 API 소량 호출. Mem0 등 장기 메모리 DB 추가 시 소액 추가. 개인 단위는 충분히 감당 가능.' },
-    sec:  { tier:'part', label:'부분 가능',          sub:'개인 판단 데이터 외부 저장 주의', text:'개인 업무 방식·판단 패턴이 외부 서버에 저장됨. 민감한 의사결정 데이터가 포함되면 보안 검토 필요. Claude Enterprise 환경 사용 시 해결.' },
+    name: '강수정',
+    idea: '게임 업계 뉴스 자동 요약·공유 봇',
+    tools: ['RSS 수집', 'Claude Enterprise', 'n8n', 'Slack Webhook'],
+    free: {
+      tier: 'ok',
+      label: '완전 가능',
+      sub: '노베이스로 재검토 필요하나 구조는 확립됨',
+      text: '팀 내 홀딩된 사례와 별개로 노베이스로 접근 권장. RSS 수집 - n8n - Claude Enterprise 요약 - Slack 전송 구조로 구현 가능. Claude API 미사용 구조가 핵심이며, n8n HTTP Request 노드로 Claude Enterprise 연동 방식 별도 확인 필요.'
+    },
+    cost: {
+      tier: 'ok',
+      label: '추가 비용 없음',
+      sub: '사내 인프라로 커버',
+      text: 'n8n Enterprise + Claude Enterprise 사내 도입 완료. 공개 뉴스 RSS는 무료.'
+    },
+    sec: {
+      tier: 'ok',
+      label: '가능',
+      sub: '공개 뉴스만 수집 — 보안 이슈 없음',
+      text: '외부 공개 뉴스만 다루므로 내부 데이터 유출 우려 없음. Slack Webhook 연동도 기존 권한 내에서 가능.'
+    },
   },
+
+  // ── 강하은 ──────────────────────────────────────────────────────────
   {
-    name: '박지민',
-    idea: '경쟁사 이슈 자동 수집 → 중요도 판별 → Slack 공유',
-    tools: ['RSS / 크롤링', 'Claude API', 'Slack Webhook', 'Make'],
-    free: { tier:'ok',   label:'완전 가능',         sub:'노코드로도 구현 가능', text:'공개 정보 수집 + Claude 중요도 판별 + Slack 자동 전송. Make·n8n으로 노코드 구현 가능. 중요도 판별 정확도는 프롬프트 튜닝으로 개선 가능.' },
-    cost: { tier:'part', label:'부분 가능',          sub:'Make 유료 플랜 $9/월~', text:'Make 무료 플랜은 월 1,000 operations로 제한. 자동화 빈도 높이면 유료($9/월~) 또는 n8n 셀프호스팅으로 대응.' },
-    sec:  { tier:'ok',   label:'가능',               sub:'공개 정보만 수집', text:'공개 경쟁사 정보만 다루므로 보안 이슈 없음.' },
+    name: '강하은',
+    idea: '엑셀 지표 - AI 분석 + 시각화 요약 보고서',
+    tools: ['Claude Enterprise (Excel 연동)', 'n8n', 'Python / pandas', 'PDF 출력'],
+    free: {
+      tier: 'ok',
+      label: '완전 가능',
+      sub: 'Claude Enterprise Excel 연동으로 즉시 시작',
+      text: 'Claude Enterprise의 Excel 연동 기능으로 파일 업로드 - 분석 - 요약 즉시 가능. 자동화 보고서 출력까지는 바이브코딩(Python + pandas + PDF)으로 구현 가능. n8n으로 반복 실행 자동화 연결 가능.'
+    },
+    cost: {
+      tier: 'ok',
+      label: '추가 비용 없음',
+      sub: '사내 인프라로 커버',
+      text: 'Claude Enterprise + n8n Enterprise 사내 도입 완료.'
+    },
+    sec: {
+      tier: 'part',
+      label: '내부/외부 게임 데이터 분리 필수',
+      sub: '내부 지표: 보안 민감 / 외부 지표: OK',
+      text: '외부 게임 지표: 공개 데이터 기반 분석은 보안 이슈 없음. / 내부 게임 지표: 사내 DAU, 매출 등 내부 지표는 보안 민감 데이터. Claude Enterprise 내 처리로 한정하거나 수치를 익명화한 후 활용 권장. 외부 API로의 원본 전송 원칙적 제한.'
+    },
   },
-  {
-    name: '박지민',
-    idea: '배너·홍보물 AI 직접 제작',
-    tools: ['Canva AI', 'Adobe Firefly', 'Midjourney'],
-    free: { tier:'ok',   label:'완전 가능',         sub:'성숙한 툴 다수 존재', text:'Canva AI, Adobe Firefly 등 이미 성숙한 툴 다수 존재. 지금 당장 가능.' },
-    cost: { tier:'part', label:'부분 가능',          sub:'Canva Pro $15/월~', text:'Canva Pro($15/월), Adobe Firefly(CC 포함). 무료 플랜은 기능 제한. 회사 CC 라이선스 있으면 추가 비용 없음.' },
-    sec:  { tier:'ok',   label:'가능',               sub:'사내 데이터 없음', text:'이미지 생성은 사내 데이터가 없으므로 보안 이슈 없음.' },
-  },
-  {
-    name: '정다인',
-    idea: '비즈니스 회의록 구조화 (클로바노트 → Claude)',
-    tools: ['Claude API', '텍스트 처리', 'Make / Notion'],
-    free: { tier:'ok',   label:'완전 가능',         sub:'노코드로도 가능', text:'클로바노트 텍스트 복붙 → Claude 구조화. 노코드로도 가능, API 연결 시 완전 자동화까지 가능.' },
-    cost: { tier:'ok',   label:'가능',               sub:'월 $1 이하', text:'텍스트 처리라 토큰 비용 낮음. 월 수십 건이면 $1 이하.' },
-    sec:  { tier:'part', label:'부분 가능',          sub:'회의 내용 민감도에 따라 다름', text:'회의 내용이 민감할 경우 외부 API 전송이 보안 이슈. Gemini Enterprise(회사 제공) 사용 또는 민감 정보 제거 후 전송 방식으로 보완 가능.' },
-  },
-  {
-    name: '정다인',
-    idea: 'AI 멀티채널 이벤트 카피 빌더',
-    tools: ['Claude API', '채널별 프롬프트 설계'],
-    free: { tier:'ok',   label:'완전 가능',         sub:'프롬프트 설계만으로 즉시 가능', text:'게임 톤앤매너 + 채널(카페/푸시/SNS)별 카피 자동 생성. 프롬프트 설계만 잘 하면 즉시 가능.' },
-    cost: { tier:'ok',   label:'가능',               sub:'월 $1 이하', text:'카피 생성은 짧은 텍스트라 비용 거의 없음. 월 $1 이하.' },
-    sec:  { tier:'ok',   label:'가능',               sub:'공개 이벤트 내용', text:'공개 이벤트 카피 생성이라 보안 이슈 없음.' },
-  },
-  {
-    name: '정다인',
-    idea: '경쟁작 주차별 패치노트 분석기',
-    tools: ['Claude API', 'Perplexity', '웹 크롤링'],
-    free: { tier:'ok',   label:'완전 가능',         sub:'공개 패치노트 + Claude', text:'공개 패치노트 수집 + Claude 분석은 지금 가능. Perplexity API로 실시간 검색 연동 시 더 정확해짐.' },
-    cost: { tier:'part', label:'부분 가능',          sub:'Perplexity API $20/월~', text:'Claude만 쓰면 소액. Perplexity API 추가 시 $20/월~ 발생. 수동 수집 + Claude 분석 방식으로 비용 없이 시작 가능.' },
-    sec:  { tier:'ok',   label:'가능',               sub:'공개 정보만 수집', text:'공개 정보만 다루므로 보안 이슈 없음.' },
-  },
-  {
-    name: '정다인',
-    idea: '글로벌 게임 규제·스토어 정책 모니터링 툴',
-    tools: ['Perplexity', 'Claude', '규제 DB', '다국어'],
-    free: { tier:'part', label:'부분 가능',          sub:'수동 보조 도구로는 가능', text:'Perplexity로 규제 정보 검색 + Claude 요약은 가능. 완전 자동화·실시간 모니터링은 규제 정보의 비정형성·다국어 복잡도로 현재 한계.' },
-    cost: { tier:'part', label:'부분 가능',          sub:'자동화 수준에 따라 상이', text:'수동 검색은 무료. 자동화 수준 높이면 Perplexity API 비용 발생. 법규 전문 DB 구독 시 고비용.' },
-    sec:  { tier:'ok',   label:'가능',               sub:'공개 법규 정보', text:'공개 법규 정보라 보안 이슈 없음.' },
-  },
-  {
-    name: '최미녀',
-    idea: '패치노트 요약 버추얼 AI GM 영상 제작',
-    tools: ['Claude 요약', 'ElevenLabs TTS', 'HeyGen 아바타'],
-    free: { tier:'ok',   label:'완전 가능',         sub:'요즘 표준 워크플로우', text:'텍스트 요약(Claude) + TTS(ElevenLabs) + 아바타 영상(HeyGen)으로 파이프라인 구성 가능. 요즘 표준 워크플로우.' },
-    cost: { tier:'part', label:'부분 가능',          sub:'HeyGen $29/월~', text:'HeyGen $29/월~, ElevenLabs $5/월~. 영상 품질 높이려면 비용 상승. SORA는 ChatGPT Pro($200/월) 필요해서 과도함.' },
-    sec:  { tier:'ok',   label:'가능',               sub:'공개 패치노트 기반', text:'공개 패치노트 기반이라 보안 이슈 없음.' },
-  },
+
+  // ── 김보경 ──────────────────────────────────────────────────────────
   {
     name: '김보경',
     idea: '국가별 애니/웹툰 인기 순위 크롤링 대시보드',
-    tools: ['크롤링', 'Claude 분석', 'Notion / Retool'],
-    free: { tier:'ok',   label:'완전 가능',         sub:'바이브코딩으로 빠르게 구현', text:'공개 플랫폼 순위 크롤링 + Claude 요약 + Notion 대시보드로 구현 가능. 바이브코딩으로 빠르게 만들 수 있는 수준.' },
-    cost: { tier:'part', label:'부분 가능',          sub:'규모 커지면 서버 비용', text:'무료로 시작 가능. 크롤링 규모 커지면 서버 비용 발생. 플랫폼 차단 시 유료 스크래핑 API($50/월~) 필요.' },
-    sec:  { tier:'ok',   label:'가능',               sub:'공개 데이터 기반', text:'공개 데이터 기반이라 보안 이슈 없음.' },
+    tools: ['크롤링', 'Claude Enterprise', 'n8n', 'Notion / Retool'],
+    free: {
+      tier: 'ok',
+      label: '완전 가능',
+      sub: '바이브코딩 + n8n으로 빠르게 구현',
+      text: '공개 플랫폼 순위 크롤링 - Claude Enterprise 요약 - Notion 대시보드 구조로 구현 가능. n8n으로 정기 수집 자동화. 바이브코딩으로 빠르게 만들 수 있는 수준.'
+    },
+    cost: {
+      tier: 'part',
+      label: '기본 무료, 규모 확장 시 비용',
+      sub: '크롤링 규모 커지면 서버 비용 발생',
+      text: 'n8n Enterprise + Claude Enterprise 사내 도입 완료. 크롤링 규모 커지면 서버 비용 발생. 플랫폼 차단 시 유료 스크래핑 API($50/월~) 필요할 수 있음.'
+    },
+    sec: {
+      tier: 'ok',
+      label: '가능',
+      sub: '외부 공개 데이터 기반',
+      text: '외부 공개 데이터 기반이라 보안 이슈 없음.'
+    },
   },
-  {
-    name: '강하은',
-    idea: '엑셀 지표 → AI 분석 + 시각화 요약 보고서',
-    tools: ['Claude API', 'Python / pandas', 'PDF 출력'],
-    free: { tier:'ok',   label:'완전 가능',         sub:'바이브코딩으로 구현 가능', text:'엑셀 업로드 → Claude 분석 → 차트 + 요약 PDF 출력. 바이브코딩으로 충분히 구현 가능.' },
-    cost: { tier:'ok',   label:'가능',               sub:'월 $5 이하', text:'파일 처리 API 비용 소액. 주 1~2회 사용 기준 월 $5 이하.' },
-    sec:  { tier:'part', label:'부분 가능',          sub:'게임 지표 민감도 확인 필요', text:'게임 지표는 민감 데이터일 수 있음. 로컬에서 처리하거나 수치만 추출해 전송하는 방식으로 보완 가능.' },
-  },
+
+  // ── 김재이 ──────────────────────────────────────────────────────────
   {
     name: '김재이',
     idea: '게임 지표 분석 + 업데이트 이력 자동 통합 AI',
-    tools: ['사내 DB', 'Claude API', '에이전트', 'n8n'],
-    free: { tier:'ok',   label:'공개 데이터 부분 가능', sub:'에이전트 구조 구현 가능', text:'외부 공개 데이터(업데이트 이력 등)는 지금 가능. 에이전트 오케스트레이션도 Claude + n8n으로 구현 가능. 사내 지표 DB 연동이 핵심 변수.' },
-    cost: { tier:'ok',   label:'가능',               sub:'공개 데이터 부분은 소액', text:'공개 데이터 부분만 구현하면 소액. 사내 DB 연동 시 인프라 비용 추가되지만 구현 자체는 가능.' },
-    sec:  { tier:'hard', label:'어려움',             sub:'사내 DB 연동 보안 검토 필수', text:'사내 게임 지표 DB를 외부 AI에 연결하는 구조가 핵심 병목. IT 보안 정책 검토 없이는 진행 불가. Claude Enterprise 환경 도입 시 해결 가능.' },
+    tools: ['Claude Enterprise', 'n8n', '에이전트 오케스트레이션', '사내 DB (심사 필요)'],
+    free: {
+      tier: 'part',
+      label: '외부 데이터 부분 가능',
+      sub: '사내 DB 연동이 핵심 변수',
+      text: '외부 공개 데이터: 경쟁 게임 업데이트 이력-공개 지표는 n8n + Claude Enterprise로 지금 가능. 에이전트 오케스트레이션도 n8n으로 구현 가능. / 사내 DB 연동: 핵심 병목. IT 보안 정책 검토 필요. Claude Enterprise MCP 커넥터를 통한 우회 가능성 별도 확인 필요.'
+    },
+    cost: {
+      tier: 'ok',
+      label: '외부 데이터 부분은 추가 비용 없음',
+      sub: '사내 DB 연동 시 인프라 비용 별도',
+      text: 'Claude Enterprise + n8n Enterprise 사내 도입 완료. 외부 공개 데이터 부분은 추가 비용 없음. 사내 DB 연동 시 인프라 구성 비용 별도 발생.'
+    },
+    sec: {
+      tier: 'hard',
+      label: '사내 DB 연동은 어려움',
+      sub: 'IT 보안 정책 검토 없이 진행 불가',
+      text: '외부 게임 데이터: 공개 정보 수집은 보안 이슈 없음. / 내부 DB 연동: 사내 게임 지표 DB를 AI와 연결하는 구조는 현재 원칙적 제한. Claude Enterprise MCP 커넥터를 통한 내부 접근 방식이 가장 현실적 우회 경로이나, IT팀 협의 및 보안 심사 선행 필수.'
+    },
   },
+
+  // ── 박정원 ──────────────────────────────────────────────────────────
+  {
+    name: '박정원',
+    idea: '주간보고 등 반복 업무 자동화',
+    tools: ['Claude Enterprise', 'n8n', '문서 자동화'],
+    free: {
+      tier: 'ok',
+      label: '완전 가능',
+      sub: 'Claude Enterprise + n8n으로 즉시 구현',
+      text: '보고서 템플릿을 Claude Enterprise에 등록하고, n8n으로 Notion-Slack 등과 연결하면 작성-배포 흐름을 자동화할 수 있음. 바이브코딩으로 하루 안에 프로토타입 완성 가능. Claude API 별도 발급 없이도 충분.'
+    },
+    cost: {
+      tier: 'ok',
+      label: '추가 비용 없음',
+      sub: '사내 도입 인프라로 커버',
+      text: 'Claude Enterprise, n8n Enterprise 모두 사내 도입 완료. 별도 개인 구독 필요 없음.'
+    },
+    sec: {
+      tier: 'part',
+      label: '내용에 따라 주의',
+      sub: '보고 내용 민감도 확인 필요',
+      text: '보고 내용을 직접 입력하는 방식이면 Claude Enterprise 내에서 처리 가능. 사내 시스템(ERP 등)에서 자동 수집하는 구조는 IT 보안 정책 확인 필요. 민감 수치는 제거 후 활용 권장.'
+    },
+  },
+
+  // ── 박지민 (1) ──────────────────────────────────────────────────────
+  {
+    name: '박지민',
+    idea: '경쟁사 이슈 자동 수집 - 중요도 판별 - Slack 공유',
+    tools: ['RSS / 크롤링', 'Claude Enterprise', 'n8n', 'Slack Webhook'],
+    free: {
+      tier: 'ok',
+      label: '완전 가능',
+      sub: 'n8n + Claude Enterprise로 노코드 구현',
+      text: '공개 경쟁사 정보 수집 - Claude Enterprise 중요도 판별 - Slack 자동 전송. n8n으로 전체 파이프라인 노코드 구현 가능. Claude API 별도 발급 없이도 충분히 작동하는 구조 설계 가능.'
+    },
+    cost: {
+      tier: 'ok',
+      label: '추가 비용 없음',
+      sub: '사내 인프라로 커버',
+      text: 'n8n Enterprise + Claude Enterprise 사내 도입 완료. 공개 정보 수집은 무료 RSS로 가능.'
+    },
+    sec: {
+      tier: 'ok',
+      label: '가능',
+      sub: '외부 공개 경쟁사 정보만 처리',
+      text: '외부 공개 정보만 다루므로 보안 이슈 없음. 내부 자사 데이터를 결합하는 구조는 추가 보안 검토 필요.'
+    },
+  },
+
+  // ── 박지민 (2) ──────────────────────────────────────────────────────
+  {
+    name: '박지민',
+    idea: '배너·홍보물 AI 직접 제작',
+    tools: ['Canva AI', 'Adobe Firefly', 'Claude Enterprise'],
+    free: {
+      tier: 'ok',
+      label: '완전 가능',
+      sub: '성숙한 툴 다수 — 지금 바로 가능',
+      text: 'Canva AI, Adobe Firefly 등 이미 성숙한 툴 다수 존재. Claude Enterprise로 카피 설계 후 이미지 툴로 시각화하는 분업 구조로 즉시 가능.'
+    },
+    cost: {
+      tier: 'part',
+      label: '툴에 따라 비용 발생',
+      sub: 'Canva Pro $15/월~ / CC 라이선스 확인',
+      text: 'Canva Pro($15/월~), Adobe Firefly(CC 포함). 회사 CC 라이선스 있으면 추가 비용 없음. 확인 필요.'
+    },
+    sec: {
+      tier: 'ok',
+      label: '가능',
+      sub: '사내 데이터 미사용',
+      text: '이미지 생성은 사내 데이터가 포함되지 않아 보안 이슈 없음. 단, 미출시 게임 시각물 생성 시 IP 유출 주의.'
+    },
+  },
+
+  // ── 박지민 (3) ──────────────────────────────────────────────────────
+  {
+    name: '박지민',
+    idea: '문서 작성 시 구조·형식 자동 제안',
+    tools: ['Claude Enterprise', 'Notion AI', 'Excel 연동'],
+    free: {
+      tier: 'ok',
+      label: '완전 가능',
+      sub: 'Claude Enterprise / Notion AI로 즉시 사용',
+      text: 'Claude Enterprise의 Excel-PPT 연동 기능과 Notion AI로 문서 구조 자동 제안 즉시 가능. 프롬프트 템플릿 설계로 작성 목적별 구조 제안 자동화 가능.'
+    },
+    cost: {
+      tier: 'ok',
+      label: '추가 비용 없음',
+      sub: '사내 인프라로 커버',
+      text: 'Claude Enterprise + Notion AI 사내 도입 완료.'
+    },
+    sec: {
+      tier: 'ok',
+      label: '가능',
+      sub: 'Enterprise 환경 내 처리',
+      text: 'Claude Enterprise 내에서 처리되므로 보안 이슈 없음.'
+    },
+  },
+
+  // ── 안홍비 ──────────────────────────────────────────────────────────
+  {
+    name: '안홍비',
+    idea: '개인 - 조직 단위 에이전트 워크플로우 도입',
+    tools: ['Claude Enterprise', 'n8n', 'Cursor (지원 확인 필요)', '에이전트 오케스트레이션'],
+    free: {
+      tier: 'ok',
+      label: '개인 단위 지금 가능',
+      sub: '조직 확장은 온보딩이 관건',
+      text: 'Claude Enterprise + n8n으로 에이전트 워크플로우 개인 단위는 지금 구축 가능. Cursor는 사내 지원 여부 확인 필요(Copilot 대체 가능). 조직 단위 확장은 기술 문제보다 팀원 온보딩-프로세스 합의가 관건.'
+    },
+    cost: {
+      tier: 'part',
+      label: 'Cursor 지원 여부 확인 필요',
+      sub: 'Claude Enterprise + n8n은 추가 비용 없음',
+      text: 'Claude Enterprise + n8n Enterprise 사내 도입 완료. Cursor($20/월~) 사내 지원 여부 확인 필요. Copilot이 대안. 조직 단위 확장 시 팀 플랜 비용 발생 가능.'
+    },
+    sec: {
+      tier: 'part',
+      label: '사내 시스템 접근 시 IT 검토',
+      sub: '공개 데이터·개인 파일 수준은 OK',
+      text: '에이전트가 사내 시스템(DB, ERP 등)에 접근하는 구조면 IT 보안 정책 검토 필요. 공개 데이터-개인 작업 파일 수준은 Claude Enterprise 환경 내에서 OK.'
+    },
+  },
+
+  // ── 우루디아 ──────────────────────────────────────────────────────────
   {
     name: '우루디아',
     idea: '경쟁작 지표 자동 분석 + 개선 인사이트 정리',
-    tools: ['공개 데이터', 'Claude 분석', 'Perplexity', 'SensorTower'],
-    free: { tier:'part', label:'부분 가능',          sub:'공개 지표 범위 내에서만', text:'공개된 경쟁사 지표(매출 순위, 리뷰, 업데이트 이력)는 수집 가능. 단, 실제 DAU·매출 같은 핵심 지표는 공개 안 됨.' },
-    cost: { tier:'part', label:'부분 가능',          sub:'SensorTower $100/월~', text:'공개 데이터만 쓰면 소액. SensorTower, AppMagic 같은 경쟁사 데이터 서비스는 유료($100/월~). 없으면 분석 범위 크게 제한됨.' },
-    sec:  { tier:'ok',   label:'가능',               sub:'공개 정보만 수집', text:'공개 정보만 다루므로 보안 이슈 없음.' },
+    tools: ['공개 데이터', 'Claude Enterprise', 'Perplexity', 'n8n', 'SensorTower (심사 필요)'],
+    free: {
+      tier: 'part',
+      label: '공개 지표 범위 내에서 가능',
+      sub: '핵심 KPI(DAU, 매출)는 공개 안 됨',
+      text: '공개된 경쟁사 지표(매출 순위, 리뷰, 업데이트 이력) 수집 + Claude Enterprise 분석은 지금 가능. n8n으로 정기 수집 자동화 가능. 단, 실제 DAU-매출 같은 핵심 지표는 공개되지 않아 SensorTower 등 유료 서비스 필요.'
+    },
+    cost: {
+      tier: 'part',
+      label: '데이터 서비스 비용 발생',
+      sub: 'SensorTower 등 $100/월~ / 사내 심사 필요',
+      text: 'Claude Enterprise + n8n은 추가 비용 없음. SensorTower, AppMagic 같은 경쟁사 데이터 서비스는 유료($100/월~). 사내 구독 예산 승인 및 API 심사 필요.'
+    },
+    sec: {
+      tier: 'ok',
+      label: '가능',
+      sub: '외부 공개 정보만 수집',
+      text: '외부 경쟁 게임 공개 정보만 다루므로 보안 이슈 없음.'
+    },
   },
-  {
-    name: '안홍비',
-    idea: '개인 → 조직 단위 에이전트 워크플로우 도입',
-    tools: ['Cursor', 'Claude', 'n8n', '에이전트 오케스트레이션'],
-    free: { tier:'ok',   label:'개인 단위 지금 가능', sub:'조직 확장은 온보딩이 관건', text:'Cursor + Claude + n8n 조합으로 에이전트 플로우 지금 구축 가능. 조직 단위 확장은 팀원 온보딩이 관건이지 기술 문제는 아님.' },
-    cost: { tier:'part', label:'부분 가능',          sub:'Cursor $20 + Claude $20/월', text:'Cursor $20/월, Claude Pro $20/월. 조직 단위로 확장하면 팀 플랜 비용 발생. 개인 실험은 소액으로 시작 가능.' },
-    sec:  { tier:'part', label:'부분 가능',          sub:'사내 시스템 접근 시 IT 검토', text:'에이전트가 사내 시스템에 접근하는 구조면 IT 정책 검토 필요. 공개 데이터·개인 파일 수준은 OK.' },
-  },
-  {
-    name: '퍼펙트킴',
-    idea: '메일 자동 대응 + 보고서 요약 + 프로젝트 현황 요약',
-    tools: ['Gmail API', 'Claude API', 'Make', 'Notion AI'],
-    free: { tier:'ok',   label:'완전 가능',         sub:'Make로 완전 자동화 가능', text:'Gmail + Claude 자동 대응, Notion AI 요약 모두 지금 가능. Make로 연결하면 완전 자동화.' },
-    cost: { tier:'part', label:'부분 가능',          sub:'Make $9/월~, 합산 $15 내외', text:'Make $9/월~, Claude API 소액. Notion AI는 회사 제공이면 무료. 합산 월 $15 내외.' },
-    sec:  { tier:'part', label:'부분 가능',          sub:'메일 내용 외부 전송 주의', text:'메일 내용이 외부 API로 전송됨. 사내 중요 메일 포함 시 보안 검토 필요. 루틴 메일만 자동화하는 방식으로 범위 제한 권장.' },
-  },
+
+  // ── 이재윤 ──────────────────────────────────────────────────────────
   {
     name: '이재윤',
     idea: '패치노트 봇 확장 + 에이전트 오케스트레이션',
-    tools: ['Claude API', 'n8n', 'Perplexity', '에이전트'],
-    free: { tier:'ok',   label:'완전 가능',         sub:'개인 실험부터 시작하기 좋음', text:'패치노트 봇은 지금 가능. n8n + Claude로 에이전트 오케스트레이션도 구현 가능. 개인 단위 실험부터 시작하기 좋음.' },
-    cost: { tier:'ok',   label:'가능',               sub:'월 $5~20 범위', text:'n8n 셀프호스팅(무료) 또는 클라우드($20/월). Claude API 소액. 전체 월 $5~20 범위.' },
-    sec:  { tier:'ok',   label:'가능',               sub:'공개 게임 데이터 기반', text:'공개 게임 데이터 기반이라 보안 이슈 없음.' },
+    tools: ['Claude Enterprise', 'n8n', 'Perplexity', '에이전트 파이프라인'],
+    free: {
+      tier: 'ok',
+      label: '완전 가능',
+      sub: '개인 실험 - 조직 확장 단계적 접근',
+      text: '패치노트 봇은 n8n + Claude Enterprise로 지금 가능. 에이전트 오케스트레이션도 n8n 멀티 워크플로우 구조로 구현 가능. 개인 단위 실험부터 시작하고 검증 후 팀 단위 확장 권장.'
+    },
+    cost: {
+      tier: 'ok',
+      label: '추가 비용 없음',
+      sub: '사내 인프라로 커버',
+      text: 'Claude Enterprise + n8n Enterprise 사내 도입 완료. Perplexity API 확장 연동 시 사내 클라우드 서비스 심사 필요.'
+    },
+    sec: {
+      tier: 'ok',
+      label: '가능 (외부 게임 데이터 기반)',
+      sub: '내부 게임 데이터 연동 시 별도 검토',
+      text: '외부 게임 공개 데이터: 패치노트-공개 지표 기반이라 보안 이슈 없음. / 내부 게임 데이터 연동 시: 사내 지표 포함 구조로 확장할 경우 IT 보안 정책 확인 필요. Claude Enterprise MCP 커넥터를 통한 내부 접근 방식이 가장 현실적 경로.'
+    },
+  },
+
+  // ── 임호민 ──────────────────────────────────────────────────────────
+  {
+    name: '임호민',
+    idea: '게임 업계 뉴스 자동 요약·공유 봇 (국내-해외 확장)',
+    tools: ['RSS 수집', 'Claude Enterprise', 'n8n', 'Slack Webhook'],
+    free: {
+      tier: 'ok',
+      label: '완전 가능',
+      sub: '국내 매체 우선, 해외 번역 확장 가능',
+      text: '국내 게임 전문 매체 RSS - n8n 수집 - Claude Enterprise 요약 - Slack 자동 전송 구조로 구현 가능. 2단계로 해외 매체 번역 요약 추가 확장 설계도 동일 파이프라인으로 가능. 팀 내 홀딩 사례와 독립적으로 노베이스 재구축 권장.'
+    },
+    cost: {
+      tier: 'ok',
+      label: '추가 비용 없음',
+      sub: '사내 인프라로 커버',
+      text: 'n8n Enterprise + Claude Enterprise 사내 도입 완료. 공개 RSS 무료.'
+    },
+    sec: {
+      tier: 'ok',
+      label: '가능',
+      sub: '공개 뉴스만 수집 — 보안 이슈 없음',
+      text: '외부 공개 정보만 수집하므로 보안 이슈 없음.'
+    },
+  },
+
+  // ── 정다인 (1) ──────────────────────────────────────────────────────
+  {
+    name: '정다인',
+    idea: '비즈니스 회의록 구조화 (클로바노트 - Claude)',
+    tools: ['Claude Enterprise', 'Notion AI', 'n8n'],
+    free: {
+      tier: 'ok',
+      label: '완전 가능',
+      sub: 'Claude Enterprise로 즉시 가능',
+      text: '클로바노트 텍스트 복붙 - Claude Enterprise 구조화. n8n 연동으로 자동화까지 가능. Claude API 별도 발급 없이도 충분. 노코드 방식으로 즉시 시작 가능.'
+    },
+    cost: {
+      tier: 'ok',
+      label: '추가 비용 없음',
+      sub: '사내 인프라로 커버',
+      text: 'Claude Enterprise + n8n Enterprise 사내 도입 완료.'
+    },
+    sec: {
+      tier: 'part',
+      label: '회의 내용 민감도에 따라 주의',
+      sub: 'Enterprise 내 처리, 범위 한정 권장',
+      text: 'Claude Enterprise 환경 내에서 처리 가능하나 임원급 회의-M&A-미출시 프로젝트 내용은 민감. 민감 정보 제거 후 구조화하거나, 회의록 요약 범위를 명확히 한정하여 활용 권장.'
+    },
+  },
+
+  // ── 정다인 (2) ──────────────────────────────────────────────────────
+  {
+    name: '정다인',
+    idea: 'AI 멀티채널 이벤트 카피 빌더',
+    tools: ['Claude Enterprise', '채널별 프롬프트 설계'],
+    free: {
+      tier: 'ok',
+      label: '완전 가능',
+      sub: '프롬프트 설계만으로 즉시 가능',
+      text: '게임 톤앤매너 + 채널(카페/푸시/SNS)별 카피 자동 생성. Claude Enterprise에 시스템 프롬프트 설계 후 즉시 가능. 템플릿화하면 팀 공용으로 배포 가능.'
+    },
+    cost: {
+      tier: 'ok',
+      label: '추가 비용 없음',
+      sub: '사내 인프라로 커버',
+      text: 'Claude Enterprise 사내 도입 완료.'
+    },
+    sec: {
+      tier: 'ok',
+      label: '가능',
+      sub: '공개 이벤트 카피 — 보안 이슈 없음',
+      text: '공개 예정 이벤트 카피 생성이라 보안 이슈 없음. 미출시 게임의 이벤트 내용은 공개 전 유출 주의.'
+    },
+  },
+
+  // ── 정다인 (3) ──────────────────────────────────────────────────────
+  {
+    name: '정다인',
+    idea: '경쟁작 주차별 패치노트 분석기',
+    tools: ['Claude Enterprise', 'n8n', 'Perplexity', '웹 크롤링'],
+    free: {
+      tier: 'ok',
+      label: '완전 가능',
+      sub: '공개 패치노트 + Claude Enterprise',
+      text: '외부 경쟁 게임 공개 패치노트 수집 - Claude Enterprise 분석. n8n으로 정기 수집 자동화 가능. Perplexity API 연동 시 실시간 검색 정확도 향상(심사 필요). 수동 수집 + Claude Enterprise 분석으로 즉시 시작 가능.'
+    },
+    cost: {
+      tier: 'part',
+      label: '기본은 무료, 확장 시 심사 필요',
+      sub: 'Perplexity API는 사내 심사 거쳐 발급',
+      text: 'Claude Enterprise + n8n은 추가 비용 없음. Perplexity API 자동화 연동은 사내 클라우드 서비스 심사 필요. 통과 전까지 수동 검색으로 대체 가능.'
+    },
+    sec: {
+      tier: 'ok',
+      label: '가능',
+      sub: '외부 공개 정보만 수집',
+      text: '외부 게임 공개 정보만 수집하므로 보안 이슈 없음.'
+    },
+  },
+
+  // ── 정다인 (4) ──────────────────────────────────────────────────────
+  {
+    name: '정다인',
+    idea: '글로벌 게임 규제·스토어 정책 모니터링 툴',
+    tools: ['Claude Enterprise', 'Perplexity', 'n8n', '다국어 처리'],
+    free: {
+      tier: 'part',
+      label: '수동 보조 도구로는 가능',
+      sub: '완전 자동화는 비정형 다국어 이슈',
+      text: 'Perplexity 리서치 + Claude Enterprise 요약 조합으로 수동 보조 분석 즉시 가능. 완전 자동 모니터링은 규제 정보의 비정형성-다국어 복잡도로 현재 한계. n8n으로 정기 검색 자동화는 가능하나 품질 관리 필요.'
+    },
+    cost: {
+      tier: 'part',
+      label: '자동화 수준에 따라 상이',
+      sub: '수동 검색은 무료 / 자동화는 심사 필요',
+      text: '수동 검색은 사내 인프라로 무료. 자동화 확장 시 외부 API 심사 필요. 법규 전문 DB 구독 시 고비용.'
+    },
+    sec: {
+      tier: 'ok',
+      label: '가능',
+      sub: '공개 법규 정보 기반',
+      text: '공개 법규-정책 정보 기반이라 보안 이슈 없음.'
+    },
+  },
+
+  // ── 최진아 ──────────────────────────────────────────────────────────
+  {
+    name: '최진아',
+    idea: '패치노트 요약 버추얼 AI GM 영상 제작',
+    tools: ['Claude Enterprise', 'ElevenLabs TTS', 'HeyGen 아바타'],
+    free: {
+      tier: 'ok',
+      label: '파이프라인 구성 가능',
+      sub: 'Claude 요약 - TTS - 아바타 영상',
+      text: '텍스트 요약(Claude Enterprise) + TTS(ElevenLabs) + 아바타 영상(HeyGen)으로 파이프라인 구성 가능. 요즘 표준 워크플로우. 실무 적용 여부는 캐릭터 IP-버추얼 GM 기준을 게임팀과 확인 필요.'
+    },
+    cost: {
+      tier: 'part',
+      label: '외부 툴 비용 발생',
+      sub: 'HeyGen $29/월~, ElevenLabs $5/월~',
+      text: 'Claude Enterprise는 사내 도입 완료. HeyGen $29/월~, ElevenLabs $5/월~. SORA(ChatGPT Pro $200/월)는 과도함. 외부 구독 비용 부서 승인 필요.'
+    },
+    sec: {
+      tier: 'ok',
+      label: '가능 (공개 패치노트 기반)',
+      sub: '게임 캐릭터 IP 활용 시 별도 확인',
+      text: '공개 패치노트 기반이라 보안 이슈 없음. 단, 자사 게임 캐릭터를 버추얼 GM으로 활용할 경우 IP 권리 및 게임팀 협의 필요.'
+    },
   },
 ];
 
@@ -405,31 +787,34 @@ const tierCfg = {
 const sectionNames = { free:'가능 시나리오 분석', cost:'비용별 가능성', sec:'보안 문제 시 가능성' };
 
 const tbody = document.getElementById('tbody');
-data.forEach(r => {
+let groupIdx = -1;
+let prevName = null;
+data.forEach((r, i) => {
+  const isNewGroup = r.name !== prevName;
+  if (isNewGroup) { groupIdx++; prevName = r.name; }
+  const groupCls = groupIdx % 2 === 0 ? 'group-a' : 'group-b';
+  const firstCls = isNewGroup ? 'group-first' : '';
   const tr = document.createElement('tr');
-  tr.innerHTML = `
-    <td class="col-name">${r.name}</td>
-    <td class="col-idea">${r.idea}</td>
-    ${['free','cost','sec'].map(k => {
+  tr.className = [groupCls, firstCls].filter(Boolean).join(' ');
+  tr.innerHTML =
+    '<td class="col-name">' + r.name + '</td>' +
+    '<td class="col-idea">' + r.idea + '</td>' +
+    ['free','cost','sec'].map(function(k) {
       const d = r[k];
       const c = tierCfg[d.tier];
-      return `<td>
-        <button class="chip ${c.chipCls}" data-name="${r.name}" data-key="${k}">
-          <span class="chip-icon">${c.icon}</span>
-          <span class="chip-text">
-            <span class="chip-label">${d.label}</span>
-            <span class="chip-sub">${d.sub}</span>
-          </span>
-        </button>
-      </td>`;
-    }).join('')}
-  `;
+      return '<td><button class="chip ' + c.chipCls + '" data-idx="' + i + '" data-key="' + k + '">' +
+        '<span class="chip-icon">' + c.icon + '</span>' +
+        '<span class="chip-text">' +
+        '<span class="chip-label">' + d.label + '</span>' +
+        '<span class="chip-sub">' + d.sub + '</span>' +
+        '</span></button></td>';
+    }).join('');
   tbody.appendChild(tr);
 });
 
-document.querySelectorAll('.chip').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const r = data.find(d => d.name === btn.dataset.name);
+document.querySelectorAll('.chip').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    const r = data[parseInt(btn.dataset.idx)];
     const k = btn.dataset.key;
     const d = r[k];
     const c = tierCfg[d.tier];
@@ -441,7 +826,7 @@ document.querySelectorAll('.chip').forEach(btn => {
     document.getElementById('m-idea').textContent = r.idea;
     document.getElementById('m-section').textContent = sectionNames[k];
     document.getElementById('m-body').textContent = d.text;
-    document.getElementById('m-tools').innerHTML = r.tools.map(t => `<span class="modal-tool">${t}</span>`).join('');
+    document.getElementById('m-tools').innerHTML = r.tools.map(function(t){ return '<span class="modal-tool">' + t + '</span>'; }).join('');
     document.getElementById('modal-bg').classList.add('open');
   });
 });
