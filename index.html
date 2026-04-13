@@ -834,3 +834,21 @@ document.querySelectorAll('.chip').forEach(function(btn) {
 function bgClose(e) { if (e.target === document.getElementById('modal-bg')) closeModal(); }
 function closeModal() { document.getElementById('modal-bg').classList.remove('open'); }
 </script>
+
+<script>
+(function() {
+  var KEY = 'nx_auth_ok';
+  var PW = 'DivisioN8';
+  if (sessionStorage.getItem(KEY) === '1') return;
+  var overlay = document.createElement('div');
+  overlay.style.cssText = '...';
+  overlay.innerHTML = `...`;
+  document.body.appendChild(overlay);
+  document.body.style.overflow = 'hidden';
+  function tryLogin() { ... }
+  document.getElementById('pw-btn').addEventListener('click', tryLogin);
+  document.getElementById('pw-input').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') tryLogin();
+  });
+})();
+</script>
